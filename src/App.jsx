@@ -8,9 +8,8 @@ function App() {
       <div className="App">
         <Canvas 
           shadows 
-          camera={{ position: [-3, 5, 4],  fov: 50 }}
+          camera={{ position: [-3, 5, 4],  fov: 80 }}
         >
-
           <color attach="background" args={['#fefefe']} />
           <Experience />
         </Canvas>
