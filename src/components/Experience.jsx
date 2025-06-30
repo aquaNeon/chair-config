@@ -26,8 +26,6 @@ const Experience = () => {
 
             <ambientLight intensity={0.5} />
 
-
-            
             <Suspense fallback={null} >
                 <Chair position={[0, -0.5, 0]} />
             </Suspense>

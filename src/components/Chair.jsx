@@ -6,7 +6,6 @@ const Chair = (props) => {
   const groupRef = useRef()
   const { nodes, materials } = useGLTF('./geometry/chair.glb')
 
-
   useEffect(() => {
     groupRef.current.traverse((child) => {
       if (child.isMesh) {
