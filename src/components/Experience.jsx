@@ -12,7 +12,7 @@ const Experience = () => {
                 target={[0, 0, 0]} 
                 minPolarAngle={0} 
                 maxPolarAngle={Math.PI / 2}
-                minDistance={1}
+                minDistance={0.2}
                 maxDistance={1.2}
             />
 
@@ -28,24 +28,26 @@ const Experience = () => {
 
             <Suspense fallback={null} >
                 <Chair position={[0, -0.5, 0]} />
-            </Suspense>
 
-            <AccumulativeShadows
-                position={[0, -0.5, 0]} 
-                scale={10}
-                color="#8d8d8d"
-                alphaTest={0.85}
-                frames={100}
-                temporal
-            >
-                <RandomizedLight 
-                    amount={8} 
-                    radius={2} 
-                    ambient={0.8} 
-                    position={[5, 5, 5]} 
-                    bias={0.0001} 
-                />
-            </AccumulativeShadows>
+
+                <AccumulativeShadows
+                    position={[0, -0.5, 0]} 
+                    scale={10}
+                    color="#8d8d8d"
+                    alphaTest={0.85}
+                    frames={100}
+                    temporal
+                >
+                    <RandomizedLight 
+                        amount={8} 
+                        radius={2} 
+                        ambient={0.8} 
+                        position={[5, 5, 5]} 
+                        bias={0.0001} 
+                    />
+                </AccumulativeShadows>
+
+            </Suspense>
         </>
     );
 };
