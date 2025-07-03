@@ -2,3 +2,20 @@
   width: 100vw;
   height: 100vh;
 }
+
+.configurator {
+  position: fixed;
+  right: 10%; 
+  top: 10%;
+  width: 20%;
+  color: black;
+}
+
+.item_label {
+  font-size: 1.5em;
+}
+
+.item:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
