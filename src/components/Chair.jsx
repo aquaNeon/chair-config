@@ -2,23 +2,27 @@ import { useRef, useEffect } from 'react'
 import { useGLTF, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
+const assetPath = "https://aquaneon.github.io/chair-config/";
+
 const Chair = (props) => {
 
   const groupRef = useRef()
-  const { nodes, materials } = useGLTF('./geometry/chair.glb')
+  const { nodes, materials } = useGLTF(`${assetPath}geometry/chair.glb`)
 
   // TEXTURES
+  // --- CORRECTED PATHS ---
   const leatherTextureProps = useTexture({
-    map: './textures/leather/leather-color.jpg',
-    normalMap: './textures/leather/leather-normal.jpg',
-    roughnessMap: './textures/leather/leather-roughness-inverted.jpg'
+    map: `${assetPath}textures/leather/leather-color.jpg`,
+    normalMap: `${assetPath}textures/leather/leather-normal.jpg`,
+    roughnessMap: `${assetPath}textures/leather/leather-roughness-inverted.jpg`
   })
 
-    const fabricTextureProps = useTexture({
-    map: './textures/fabric/Fabric036_1K-JPG_Color.jpg',
-    normalMap: './textures/fabric/Fabric036_1K-JPG_NormalGL.jpg',
-    aoMap: './textures/fabric/Fabric036_1K-JPG_AmbientOcclusion.jpg',
-    roughnessMap: './textures/fabric/Fabric036_1K-JPG_Roughness.jpg',  
+  // --- CORRECTED PATHS ---
+  const fabricTextureProps = useTexture({
+    map: `${assetPath}textures/fabric/Fabric036_1K-JPG_Color.jpg`,
+    normalMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_NormalGL.jpg`,
+    aoMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_AmbientOcclusion.jpg`,
+    roughnessMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_Roughness.jpg`,  
   })
 
 fabricTextureProps.map.repeat.set(1,1);
