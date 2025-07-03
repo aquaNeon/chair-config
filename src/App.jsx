@@ -7,7 +7,6 @@ import { Suspense } from 'react';
 
 function App() {
 
-  
   return (
       <div className="App">
         <CustomizationProvider>
@@ -22,7 +21,7 @@ function App() {
             <Configurator />
           </Suspense>
         </CustomizationProvider>
-      </div>
+      </div> // random comment to push
   )
 }
 
