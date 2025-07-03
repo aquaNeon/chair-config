@@ -1,5 +1,6 @@
 {
   "name": "chair-config",
+  "homepage": "https://aquaNeon.github.io/charir-config",
   "private": true,
   "version": "0.0.0",
   "type": "module",
