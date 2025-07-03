@@ -9,14 +9,16 @@ function App() {
   return (
       <div className="App">
         <CustomizationProvider>
-          <Canvas 
-            shadows 
-            camera={{ position: [-3, 5, 4],  fov: 80 }}
-          >
-            <color attach="background" args={['#fefefe']} />
-            <Experience />
-          </Canvas>
-          <Configurator />
+           <Suspense fallback={null}> 
+            <Canvas 
+              shadows 
+              camera={{ position: [-3, 5, 4],  fov: 80 }}
+            >
+              <color attach="background" args={['#fefefe']} />
+              <Experience />
+            </Canvas>
+            <Configurator />
+          </Suspense>
         </CustomizationProvider>
       </div>
   )
