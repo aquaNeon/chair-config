@@ -3,6 +3,7 @@ import Configurator from './components/Configurator.jsx';
 import Experience from './components/Experience.jsx'
 import { Canvas } from '@react-three/fiber'
 import { CustomizationProvider } from './context/customization.jsx';
+import { Suspense } from 'react';
 
 function App() {
 
