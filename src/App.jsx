@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 
 function App() {
 
+  
   return (
       <div className="App">
         <CustomizationProvider>
