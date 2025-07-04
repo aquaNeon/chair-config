@@ -15,13 +15,13 @@ function App() {
               shadows 
               camera={{ position: [-3, 5, 4],  fov: 80 }}
             >
-              <color attach="background" args={['#fefe00']} />
+              <color attach="background" args={['#fefefe']} />
               <Experience />
             </Canvas>
             <Configurator />
           </Suspense>
         </CustomizationProvider>
-      </div> // random comment to push
+      </div>
   )
 }
 

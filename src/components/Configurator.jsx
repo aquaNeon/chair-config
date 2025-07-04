@@ -1,3 +1,4 @@
+// THIS IS THE WEBFLOW WORKING VERSION 
 import { useEffect } from 'react';
 import { useCustomization } from "../context/customization";
 
@@ -37,7 +38,7 @@ const Configurator = () => {
 
 export default Configurator;
 
-
+// DEV MODE CONFIG 
 // import { useCustomization } from "../context/customization";
 
 // const Configurator = () => {
