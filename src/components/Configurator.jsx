@@ -44,7 +44,7 @@ import { useCustomization } from "../context/customization";
 
 const Configurator = () => {
     
-    const {material, setMaterial, frame, setFrame} = useCustomization();
+    const {material, setMaterial, frame, setFrame, frameColor, setFrameColor, frameColorOptions,  cushionColor, cushionColorOptions, setCushionColor} = useCustomization();
     console.log('matreial:', material);
     
     return (
@@ -76,6 +76,43 @@ const Configurator = () => {
                 </div>
             </div>
         </div>
+            <div className="UI-container">
+                <div className="UI-content">
+                    <div className="item-header">Frame Colors</div>
+                    <div className="item-wrapper">
+                        {frameColorOptions.map((item, index) => (
+                        <div key={index} className="item" onClick={() => setFrameColor(item)}>
+                            <div className="item_view" style={{
+                                backgroundColor: item.color,
+                                height: '24px',
+                                width: '24px',
+                            }}></div>
+                            <div className="item_label">{item.name}</div>
+                        </div>
+                        ))
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div className="UI-container">
+                <div className="UI-content">
+                    <div className="item-header">Cushion Colors</div>
+                    <div className="item-wrapper">
+                        {cushionColorOptions.map((item, index) => (
+                        <div key={index} className="item" onClick={() => setCushionColor(item)}>
+                            <div className="item_view" style={{
+                                backgroundColor: item.color,
+                                height: '24px',
+                                width: '24px',
+                            }}></div>
+                            <div className="item_label">{item.name}</div>
+                        </div>
+                        ))
+                        }
+                    </div>
+                </div>
+            </div>
 
     </div>
         
