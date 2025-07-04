@@ -1,9 +1,11 @@
 import { OrbitControls, Environment, AccumulativeShadows, RandomizedLight } from '@react-three/drei'
 import { Suspense } from 'react';
 import Chair from './Chair';
+import { useCustomization } from '../context/customization';
 
 
 const Experience = () => {
+    const {frame} = useCustomization();
 
     return (
         <>
@@ -31,6 +33,7 @@ const Experience = () => {
 
 
                 <AccumulativeShadows
+                    key={frame}
                     position={[0, -0.5, 0]} 
                     scale={10}
                     color="#8d8d8d"

@@ -6,8 +6,7 @@ import * as THREE from 'three';
 const assetPath = "https://aquaneon.github.io/chair-config/";
 
 const Chair = (props) => {
-  // --- STEP 1: Call ALL hooks at the top level, in the same order, every time. ---
-  const { material } = useCustomization();
+  const { material, frame } = useCustomization();
   const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
 
   // Load all texture sets directly. They will be handled by Suspense.
@@ -30,24 +29,22 @@ const Chair = (props) => {
     roughnessMap: `${assetPath}textures/wood/Wood051_1K-JPG_Roughness-inverted.jpg`
   });
 
-  // --- STEP 2: Perform all side effects (modifications) inside useEffect hooks. ---
   
-  // This effect runs AFTER the fabric and wood textures have loaded.
+
   useEffect(() => {
     // Safely modify the fabric textures
     for (const texture of Object.values(fabricTextures)) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(2, 2);
-      texture.needsUpdate = true; // Tell Three.js the texture has been modified
+      texture.needsUpdate = true; 
     }
     // Safely modify the wood textures
     for (const texture of Object.values(woodTextures)) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.needsUpdate = true;
     }
-  }, [fabricTextures, woodTextures]); // This effect depends on the loaded textures.
+  }, [fabricTextures, woodTextures]);
 
-  // This effect safely adds the 'uv2' attribute for the AO map.
   useEffect(() => {
     if (nodes.cushion.geometry) {
       nodes.cushion.geometry.setAttribute('uv2', new THREE.BufferAttribute(nodes.cushion.geometry.attributes.uv.array, 2));
@@ -55,13 +52,13 @@ const Chair = (props) => {
   }, [nodes.cushion.geometry]);
 
 
-  // --- STEP 3: The render function is now clean and declarative. ---
   return (
     <group {...props} dispose={null}>
       <mesh 
         castShadow 
         receiveShadow 
-        geometry={nodes.frame_1.geometry} 
+        geometry={nodes.frame_1.geometry}
+        visible={frame === 1} 
       >
         <meshStandardMaterial {...woodTextures} />
       </mesh>
@@ -76,9 +73,11 @@ const Chair = (props) => {
       </mesh>
       
       <mesh 
+        castShadow 
+        receiveShadow 
         geometry={nodes.frame_2.geometry}
         material={nodes.frame_2.material}
-        visible={false} 
+        visible={frame === 2} 
       />
     </group>
   );
