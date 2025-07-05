@@ -7,21 +7,29 @@ const assetPath = "https://aquaneon.github.io/chair-config/";
 
 const Chair = (props) => {
   const { material, frame, frameColor, cushionColor } = useCustomization();
-  const { nodes } = useGLTF(`${assetPath}geometry/chair2.glb`);
+  const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
 
-  // Load all texture sets directly. They will be handled by Suspense.
-  const leatherTextures = useTexture({
-    normalMap: `${assetPath}textures/leather/leather-normal.jpg`,
-    roughnessMap: `${assetPath}textures/leather/leather-roughness-inverted.jpg`
+  // const leatherTextures = useTexture({
+  //   map: `${assetPath}textures/leather/leather-color.jpg`,
+  //   normalMap: `${assetPath}textures/leather/leather-normal.jpg`,
+  //   roughnessMap: `${assetPath}textures/leather/leather-roughness-inverted.jpg`
+  // });
+
+    const leatherTextures = useTexture({
+    map: './textures/leather/leather_al.jpg',
+    normalMap: './textures/leather/leather_n.jpg',
+    roughnessMap: './textures/leather/leather_r2.jpg'
   });
 
   const fabricTextures = useTexture({
+    map: `${assetPath}textures/fabric/Fabric036_1K-JPG_Color.jpg`,
     normalMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_NormalGL.jpg`,
     aoMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_AmbientOcclusion.jpg`,
     roughnessMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_Roughness.jpg`,
   });
 
   const woodTextures = useTexture({
+    map: `${assetPath}textures/wood/Wood051_1K-JPG_Color.jpg`,
     normalMap: `${assetPath}textures/wood/Wood051_1K-JPG_NormalGL.jpg`,
     roughnessMap: `${assetPath}textures/wood/Wood051_1K-JPG_Roughness-inverted.jpg`
   });
@@ -34,47 +42,68 @@ const Chair = (props) => {
       metalness: 1,
       envMapIntensity: 1.5,
       clearcoat: 0.3,
-      clearcoatRoughness: 0.5,
+      clearcoatRoughness: 0.1,
     });
   }, [frameColor.color]);
 
   const woodMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: frameColor.color,
-      ...woodTextures,
+    const material = new THREE.MeshStandardMaterial({
+      map: woodTextures.map,
+      normalMap: woodTextures.normalMap,
+      roughnessMap: woodTextures.roughnessMap,
       roughness: 0.8,
       metalness: 0,
     });
+    
+    // Create a more subtle color blend - this acts like a wood stain
+    const stainColor = new THREE.Color(frameColor.color);
+    // Make the stain less intense so wood grain shows through
+    stainColor.multiplyScalar(2); 
+    material.color.copy(stainColor);
+    
+    return material;
   }, [frameColor.color, woodTextures]);
 
   const leatherMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: cushionColor.color,
+    const material = new THREE.MeshStandardMaterial({
       ...leatherTextures,
       roughness: 0.8,
       metalness: 0,
     });
+    
+    // Mix the leather texture with the selected color
+    material.color.copy(new THREE.Color(cushionColor.color));
+    
+    return material;
   }, [cushionColor.color, leatherTextures]);
 
   const fabricMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: cushionColor.color,
+    const material = new THREE.MeshStandardMaterial({
       ...fabricTextures,
+      roughness: 0.9,
       metalness: 0,
       aoMapIntensity: 1,
     });
+    
+    // Mix the fabric texture with the selected color
+    material.color.copy(new THREE.Color(cushionColor.color));
+    
+    return material;
   }, [cushionColor.color, fabricTextures]);
 
   useEffect(() => {
-    // Safely modify the fabric textures
     for (const texture of Object.values(fabricTextures)) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(2, 2);
+      texture.repeat.set(0.3, 0.3);
       texture.needsUpdate = true;
     }
-    // Safely modify the wood textures
     for (const texture of Object.values(woodTextures)) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.needsUpdate = true;
+    }
+    for (const texture of Object.values(leatherTextures)) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(0.35, 0.35);
       texture.needsUpdate = true;
     }
   }, [fabricTextures, woodTextures]);
@@ -87,7 +116,6 @@ const Chair = (props) => {
 
   return (
     <group {...props} dispose={null}>
-      {/* Frame 1 - Metal */}
       <mesh 
         castShadow 
         receiveShadow 
@@ -96,7 +124,6 @@ const Chair = (props) => {
         visible={frame === 1} 
       />
       
-      {/* Cushion */}
       <mesh 
         castShadow 
         receiveShadow 
@@ -104,7 +131,6 @@ const Chair = (props) => {
         material={material === 'leather' ? leatherMaterial : fabricMaterial}
       />
       
-      {/* Frame 2 - Wood */}
       <mesh 
         castShadow 
         receiveShadow 

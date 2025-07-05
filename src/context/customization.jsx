@@ -11,16 +11,12 @@ const frameColorOptions = [
     name: "espresso",
   },
   {
-    color: "#D4AF37",
-    name: "champange",
-  },
-  {
-    color: "#41424C ",
+    color: "#41424C",
     name: "graphite",
   },
   {
     color: "#F7E7CE",
-    name: "champange gold",
+    name: "champange",
   },
   {
     color: "#fefefe",
@@ -38,16 +34,16 @@ const frameColorOptions = [
 
 const cushionColorOptions = [
     {
-    color: "#fefefe",
+    color: "#f3f3f3",
     name: "white",
   },
     {
-    color: "#87A96B",
-    name: "green",
+    color: "#F3CCCF",
+    name: "powder",
   },
   {
-    color: "#36454F",
-    name: "charcoal",
+    color: "#4E352C",
+    name: "mocha",
   },
   {
     color: "#F5F5DC",
