@@ -10,9 +10,9 @@ const Chair = (props) => {
   const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
 
     const leatherTextures = useTexture({
-    map: './textures/leather/leather_al.jpg',
-    normalMap: './textures/leather/leather_n.jpg',
-    roughnessMap: './textures/leather/leather_r2.jpg'
+    map: `${assetPath}textures/leather/leather_al.jpg`,
+    normalMap: `${assetPath}textures/leather/leather_n.jpg`,
+    roughnessMap: `${assetPath}textures/leather/leather_r2.jpg`
   });
 
   const fabricTextures = useTexture({
