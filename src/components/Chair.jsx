@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { useCustomization } from '../context/customization';
 import * as THREE from 'three';
@@ -6,22 +6,20 @@ import * as THREE from 'three';
 const assetPath = "https://aquaneon.github.io/chair-config/";
 
 const Chair = (props) => {
-  // --- STEP 1: Call ALL hooks at the top level, in the same order, every time. ---
-  const { material } = useCustomization();
+  const { material, frame, frameColor, cushionColor } = useCustomization();
   const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
 
-  // Load all texture sets directly. They will be handled by Suspense.
-  const leatherTextures = useTexture({
-    map: `${assetPath}textures/leather/leather-color.jpg`,
-    normalMap: `${assetPath}textures/leather/leather-normal.jpg`,
-    roughnessMap: `${assetPath}textures/leather/leather-roughness-inverted.jpg`
+    const leatherTextures = useTexture({
+    map: `${assetPath}textures/leather/leather_al.jpg`,
+    normalMap: `${assetPath}textures/leather/leather_n.jpg`,
+    roughnessMap: `${assetPath}textures/leather/leather_r2.jpg`
   });
 
   const fabricTextures = useTexture({
     map: `${assetPath}textures/fabric/Fabric036_1K-JPG_Color.jpg`,
     normalMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_NormalGL.jpg`,
     aoMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_AmbientOcclusion.jpg`,
-    roughnessMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_Roughness.jpg`,  
+    roughnessMap: `${assetPath}textures/fabric/Fabric036_1K-JPG_Roughness.jpg`,
   });
 
   const woodTextures = useTexture({
@@ -30,55 +28,106 @@ const Chair = (props) => {
     roughnessMap: `${assetPath}textures/wood/Wood051_1K-JPG_Roughness-inverted.jpg`
   });
 
-  // --- STEP 2: Perform all side effects (modifications) inside useEffect hooks. ---
-  
-  // This effect runs AFTER the fabric and wood textures have loaded.
+  // Create materials with useMemo to avoid recreating them on every render
+  const metalMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: frameColor.color,
+      roughness: 0.1,
+      metalness: 1,
+      envMapIntensity: 1.5,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.1,
+    });
+  }, [frameColor.color]);
+
+  const woodMaterial = useMemo(() => {
+    const material = new THREE.MeshStandardMaterial({
+      map: woodTextures.map,
+      normalMap: woodTextures.normalMap,
+      roughnessMap: woodTextures.roughnessMap,
+      roughness: 0.8,
+      metalness: 0,
+    });
+    
+    // Create a more subtle color blend 
+    const stainColor = new THREE.Color(frameColor.color);
+    stainColor.multiplyScalar(2); 
+    material.color.copy(stainColor);
+    
+    return material;
+  }, [frameColor.color, woodTextures]);
+
+  const leatherMaterial = useMemo(() => {
+    const material = new THREE.MeshStandardMaterial({
+      ...leatherTextures,
+      roughness: 0.8,
+      metalness: 0,
+    });
+    
+    material.color.copy(new THREE.Color(cushionColor.color));
+    
+    return material;
+  }, [cushionColor.color, leatherTextures]);
+
+  const fabricMaterial = useMemo(() => {
+    const material = new THREE.MeshStandardMaterial({
+      ...fabricTextures,
+      roughness: 0.9,
+      metalness: 0,
+      aoMapIntensity: 1,
+    });
+    
+    material.color.copy(new THREE.Color(cushionColor.color));
+    
+    return material;
+  }, [cushionColor.color, fabricTextures]);
+
   useEffect(() => {
-    // Safely modify the fabric textures
     for (const texture of Object.values(fabricTextures)) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(2, 2);
-      texture.needsUpdate = true; // Tell Three.js the texture has been modified
+      texture.repeat.set(0.3, 0.3);
+      texture.needsUpdate = true;
     }
-    // Safely modify the wood textures
     for (const texture of Object.values(woodTextures)) {
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.needsUpdate = true;
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.needsUpdate = true;
     }
-  }, [fabricTextures, woodTextures]); // This effect depends on the loaded textures.
+    for (const texture of Object.values(leatherTextures)) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(0.35, 0.35);
+      texture.needsUpdate = true;
+    }
+  }, [fabricTextures, woodTextures]);
 
-  // This effect safely adds the 'uv2' attribute for the AO map.
   useEffect(() => {
     if (nodes.cushion.geometry) {
       nodes.cushion.geometry.setAttribute('uv2', new THREE.BufferAttribute(nodes.cushion.geometry.attributes.uv.array, 2));
     }
   }, [nodes.cushion.geometry]);
 
-
-  // --- STEP 3: The render function is now clean and declarative. ---
   return (
     <group {...props} dispose={null}>
       <mesh 
         castShadow 
         receiveShadow 
-        geometry={nodes.frame_1.geometry} 
-      >
-        <meshStandardMaterial {...woodTextures} />
-      </mesh>
+        geometry={nodes.frame_1.geometry}
+        material={woodMaterial}
+        visible={frame === 1} 
+      />
       
       <mesh 
         castShadow 
         receiveShadow 
         geometry={nodes.cushion.geometry}
-      >
-        {material === 'leather' && <meshStandardMaterial {...leatherTextures} />}
-        {material === 'fabric' && <meshStandardMaterial {...fabricTextures} aoMapIntensity={1} />}
-      </mesh>
+        material={material === 'leather' ? leatherMaterial : fabricMaterial}
+      />
       
       <mesh 
+        castShadow 
+        receiveShadow 
         geometry={nodes.frame_2.geometry}
-        material={nodes.frame_2.material}
-        visible={false} 
+        material={metalMaterial}
+        visible={frame === 2} 
       />
     </group>
   );
