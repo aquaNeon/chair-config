@@ -9,12 +9,6 @@ const Chair = (props) => {
   const { material, frame, frameColor, cushionColor } = useCustomization();
   const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
 
-  // const leatherTextures = useTexture({
-  //   map: `${assetPath}textures/leather/leather-color.jpg`,
-  //   normalMap: `${assetPath}textures/leather/leather-normal.jpg`,
-  //   roughnessMap: `${assetPath}textures/leather/leather-roughness-inverted.jpg`
-  // });
-
     const leatherTextures = useTexture({
     map: './textures/leather/leather_al.jpg',
     normalMap: './textures/leather/leather_n.jpg',
@@ -55,9 +49,8 @@ const Chair = (props) => {
       metalness: 0,
     });
     
-    // Create a more subtle color blend - this acts like a wood stain
+    // Create a more subtle color blend 
     const stainColor = new THREE.Color(frameColor.color);
-    // Make the stain less intense so wood grain shows through
     stainColor.multiplyScalar(2); 
     material.color.copy(stainColor);
     
@@ -71,7 +64,6 @@ const Chair = (props) => {
       metalness: 0,
     });
     
-    // Mix the leather texture with the selected color
     material.color.copy(new THREE.Color(cushionColor.color));
     
     return material;
@@ -85,7 +77,6 @@ const Chair = (props) => {
       aoMapIntensity: 1,
     });
     
-    // Mix the fabric texture with the selected color
     material.color.copy(new THREE.Color(cushionColor.color));
     
     return material;
