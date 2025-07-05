@@ -21,7 +21,7 @@ function App() {
             <Configurator />
           </Suspense>
         </CustomizationProvider>
-      </div> // random comment to push
+      </div>
   )
 }
 

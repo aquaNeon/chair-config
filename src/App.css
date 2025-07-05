@@ -11,11 +11,27 @@
   color: black;
 }
 
-.item_label {
+.item-header {
   font-size: 1.5em;
+  margin-bottom: 16px;
+}
+
+.item_label {
+  font-size: 1em;
 }
 
 .item:hover {
   cursor: pointer;
   opacity: 0.5;
+}
+
+.item-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  gap: 16px;
+}
+
+.UI-container {
+  margin-bottom: 32px;
 }
