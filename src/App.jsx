@@ -13,7 +13,6 @@ function App() {
            <Suspense fallback={null}> 
             <Canvas 
               shadows 
-              camera={{ position: [-3, 5, 4],  fov: 80 }}
             >
               <color attach="background" args={['#fefefe']} />
               <Experience />
