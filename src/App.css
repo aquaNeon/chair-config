@@ -1,8 +1,8 @@
 .App {
   /* This does not look right locally or on github pages, but it has to be 
   styled this way to not conflict with the webflow css */
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 .configurator {
