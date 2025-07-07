@@ -29,7 +29,7 @@ const Experience = () => {
                 minPolarAngle={0} 
                 maxPolarAngle={Math.PI / 2}
                 minDistance={1.0}
-                maxDistance={1.2}
+                maxDistance={1.0}
                 enablePan={false}
             />
 

@@ -7,7 +7,8 @@ const assetPath = "https://aquaneon.github.io/chair-config/";
 
 const Chair = (props) => {
   const { material, frame, frameColor, cushionColor } = useCustomization();
-  const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
+  // const { nodes } = useGLTF(`${assetPath}geometry/chair.glb`);
+  const { nodes } = useGLTF(`${assetPath}geometry/chair2.glb`);
 
     const leatherTextures = useTexture({
     map: `${assetPath}textures/leather/leather_al.jpg`,
@@ -90,6 +91,7 @@ const Chair = (props) => {
     }
     for (const texture of Object.values(woodTextures)) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(2.3, 2.3);
       texture.needsUpdate = true;
     }
     for (const texture of Object.values(leatherTextures)) {
